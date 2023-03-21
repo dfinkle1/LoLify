@@ -33,7 +33,7 @@ me = lol_watcher.summoner.by_name('na1','finkle11')
 def home():
     # search = SearchMatch()
     championlist = lol_watcher.data_dragon.champions('13.5.1')
-    return render_template('base.html',champions=championlist)
+    return render_template('index.html',champions=championlist)
 
 @app.route('/search',methods=['GET','POST'])
 def search():
@@ -52,10 +52,20 @@ def search():
 
 @app.route('/search/<username>',methods=['GET'])
 def showmatches(username):
-    person = lol_watcher.summoner.by_name('na1',username)
-    matches = lol_watcher.match.matchlist_by_puuid('na1',person['puuid'],0,2)
-    match = lol_watcher.match.by_id('na1',matches[0])
-    return render_template('match.html',matches=matches,match=match)
+    user = Puuid.query.filter_by(username=username).first()
+    
+    matches = lol_watcher.match.matchlist_by_puuid('na1',user.puuid,0,2)
+    games = []
+    for match in matches:
+        games.append(lol_watcher.match.by_id('na1',match))
+    # enemies = []
+    # for puuid in games[0]['info']['participants']:
+    #    if puuid['puuid'] == user.puuid:
+    #         player = puuid
+    #    else: enemies.append(puuid)
+    # return render_template('match.html',player=player, enemies=enemies,games=games,user=user)
+    return render_template('match.html',games=games,user=user)
+    # return render_template('match.html',matches=matches,match=match)
 
 
 # @app.route('/matches')

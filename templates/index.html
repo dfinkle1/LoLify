@@ -1,0 +1,5 @@
+{% extends 'base.html' %} {%for key in champions['data']%}
+<p>{{key}}</p>
+<small>{{champions['data'][key]['title']}}</small>
+
+{%endfor%}
