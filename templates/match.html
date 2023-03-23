@@ -1,33 +1,71 @@
 {% extends 'base.html' %}{% block content %}
-  <body>
-    <h1>Match History for {{user.username}}</h1>
-    <section>
-    {% for game in games %}
-        {% for puuid in game['info']['participants']%}
-            {% if puuid['puuid'] == user.puuid %}
-                {% set player = puuid %}
-                <h2>Team 1</h2>
-                {% for puuid in game['info']['participants']%}
-                    {% if puuid['teamId'] == player.teamId %}
-                    {{puuid['summonerName']}} <small>{{puuid['championName']}}</small>
-                    KDA:{{puuid['kills']}}/{{puuid['deaths']}}/{{puuid['assists']}}
-                    Gold: {{puuid['goldEarned']}} Damage to Champions:{{puuid['totalDamageDealtToChampions']}}
-                    Control Wards Purchased: {{puuid['visionWardsBoughtInGame']}}
-                    <hr>
-                    {%endif%}
-                    {%endfor%}
-                <h2>Team 2</h2>
-                {% for puuid in game['info']['participants']%}
-                    {% if puuid['teamId'] != player.teamId %}
-                    {{puuid['summonerName']}} <small>{{puuid['championName']}}</small>
-                    KDA:{{puuid['kills']}}/{{puuid['deaths']}}/{{puuid['assists']}}
-                    Gold: {{puuid['goldEarned']}} Damage to Champions:{{puuid['totalDamageDealtToChampions']}}
-                    Control Wards Purchased: {{puuid['visionWardsBoughtInGame']}}
-                    <hr>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-  </body>
-  {% endblock %}
+<h1 class="d-flex justify-content-md-center">
+  Match History for {{user.username}}
+</h1>
+<h1>testing tables</h1>
+{% for game in games %}
+<h1>Match</h1>
+{% for puuid in game['info']['participants']%} {% if puuid['puuid'] ==
+user.puuid %} {% set player = puuid %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <table class="table">
+        <h2 class="text-center">Team 1</h2>
+        <tbody>
+          <tr>
+            <th>Summoner</th>
+            <th>Champion</th>
+            <th>KDA</th>
+            <th>Gold</th>
+            <th>Damage to Champions</th>
+            <th>Control Wards Purchased</th>
+          </tr>
+          {% for puuid in game['info']['participants']%} {% if puuid['teamId']
+          == player.teamId %}
+          <tr>
+            <td>{{puuid['summonerName']}}</td>
+            <td>{{puuid['championName']}}</td>
+            <td>{{puuid['kills']}}/{{puuid['deaths']}}/{{puuid['assists']}}</td>
+            <td>{{puuid['goldEarned']}}</td>
+            <td class="">{{puuid['totalDamageDealtToChampions']}}</td>
+            <td>{{puuid['visionWardsBoughtInGame']}}</td>
+          </tr>
+          {%endif%} {%endfor%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- This is the seperation between two teams -->
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <table class="table">
+        <h2>Team 2</h2>
+        <tbody>
+          <tr>
+            <th>Summoner</th>
+            <th>Champion</th>
+            <th>KDA</th>
+            <th>Gold</th>
+            <th>Damage to Champions</th>
+            <th>Control Wards Purchased</th>
+          </tr>
+          {% for puuid in game['info']['participants']%} {% if puuid['teamId']
+          != player.teamId %}
+          <tr>
+            <td>{{puuid['summonerName']}}</td>
+            <td>{{puuid['championName']}}</td>
+            <td>{{puuid['kills']}}/{{puuid['deaths']}}/{{puuid['assists']}}</td>
+            <td>{{puuid['goldEarned']}}</td>
+            <td class="">{{puuid['totalDamageDealtToChampions']}}</td>
+            <td>{{puuid['visionWardsBoughtInGame']}}</td>
+          </tr>
+          {%endif%} {%endfor%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endif %} {% endfor %} {% endfor %} {% endblock %}

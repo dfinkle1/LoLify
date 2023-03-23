@@ -1,0 +1,12 @@
+{% extends 'base.html' %}{% block content %}
+<div class="profile-container">
+  <img src="{{user.image_url}}" class="avatar-img" />
+  <div class="profile-info">
+    <h3 class="profile-username">{{user.username.capitalize()}}</h3>
+    <p class="bio">testing bio</p>
+    {% if g.user == {{user.username}} %}
+    <button class="btn btn-secondary btn-sm">Edit</button>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
