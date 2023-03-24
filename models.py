@@ -18,7 +18,8 @@ class User(db.Model):
     password = db.Column(db.String, nullable=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
     image_url = db.Column(db.Text,default="/static/images/default-pic.png",)
-    # bio = db.Column(db.Text,nullable=True)
+    bio = db.Column(db.Text,nullable=True)
+    summoner = db.Column(db.String, nullable=True)
     
     @classmethod
     def register(cls,username,password,email,image_url):

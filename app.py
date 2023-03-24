@@ -30,7 +30,6 @@ toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
-me = lol_watcher.summoner.by_name('na1','finkle11')
 @app.route('/')
 def home():
     # search = SearchMatch()
@@ -41,7 +40,7 @@ def home():
 def search():
     form = SearchMatch()
     if form.validate_on_submit():
-        value = form.search.data
+        value = form.search.data.lower()
         name = Puuid.query.filter_by(username=value).first()
         if name is None:
             summoner = lol_watcher.summoner.by_name('na1',value)
@@ -61,14 +60,7 @@ def showmatches(username):
     for match in matches:
         games.append(lol_watcher.match.by_id('na1',match))
     
-    counter = 0;
-    # enemies = []
-    # for puuid in games[0]['info']['participants']:
-    #    if puuid['puuid'] == user.puuid:
-    #         player = puuid
-    #    else: enemies.append(puuid)
-    # return render_template('match.html',player=player, enemies=enemies,games=games,user=user)
-    return render_template('match.html',games=games,user=user,counter=counter)
+    return render_template('match.html',games=games,user=user,)
 
 # User Signup/login/logout
 
@@ -144,12 +136,28 @@ def logout():
 @app.route('/users/<username>')
 def profile(username):
     user = User.query.filter_by(username=username).first()
+    dbSummoner = Puuid.query.filter_by(username=username).first()
     if user is None:
         flash('Not a current User','danger')
         return redirect('/')
+    if user.summoner is None:
+        return render_template('profile.html',user=user)
     
-    return render_template('profile.html',user=user)
-    
+
+    summoner = lol_watcher.summoner.by_name('na1',user.summoner)
+    matches = lol_watcher.match.matchlist_by_puuid('na1',summoner['puuid'],0,2)
+    games = []
+    for match in matches:
+        games.append(lol_watcher.match.by_id('na1',match))
+    rank = lol_watcher.league.by_summoner('na1',summoner['id'])
+    return render_template('profile.html',user=user,rank=rank,games=games,summoner=summoner)
+
+@app.route('/update_summoner/<username>',methods=['POST'])
+def update_user_summoner(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    user.summoner = request.form['summoner']
+    db.session.commit()
+    return redirect(f'/users/{username}')
 
 
 # @app.route('/matches')
