@@ -18,3 +18,9 @@ class Login(FlaskForm):
     """Login to a user account"""
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password',validators=[Length(min=6)])
+
+class EditUser(FlaskForm):
+    email= StringField('E-mail',validators=[DataRequired(),Email()])
+    summoner = StringField('Summoner Name')
+    image_url = StringField('Image Url (Optional)')
+    bio = TextAreaField('Bio (Optional)')

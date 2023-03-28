@@ -1,0 +1,23 @@
+{% extends 'base.html' %} {% block content %} {% if users|length == 0 %}
+<h3>Sorry, no users found</h3>
+{% else %}
+<div class="row justify-content-end">
+  <div class="col-sm-9">
+    <div class="row">
+      {% for user in users %}
+      <div class="col-lg-4 col-md-6 col-12">
+        <div class="card custom-card">
+          <div class="card-contents">
+            <a href="/users/{{ user.username }}" class="card-link">
+              <p style="color: aqua">@{{ user.username }}</p>
+            </a>
+          </div>
+          <p class="card-bio">{{user.bio}}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% endif %} {% endblock %}
+  </div>
+</div>

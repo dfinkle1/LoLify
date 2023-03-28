@@ -34,6 +34,7 @@
           <div class="navbar-nav">
             <a class="nav-link active" aria-current="page" href="/">Home</a>
             <a class="nav-link active" href="/search">Search</a>
+            <a class="nav-link active" href="/users">Users</a>
           </div>
         </div>
         <div class="navbar-nav navbar-right">
@@ -45,12 +46,22 @@
             <a
               class="nav-link dropdown-toggle"
               role="button"
+              id="navbarDropdown"
+              aria-expanded="false"
               data-bs-toggle="dropdown"
-              href="/users/{{g.user.username}}"
-              >Profile</a
+              >{{g.user.username}}</a
             >
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/edit">Edit</a></li>
+              <li>
+                <a class="dropdown-item" href="/users/{{g.user.username}}"
+                  >Profile</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="/users/{{g.user.username}}/edit"
+                  >Edit</a
+                >
+              </li>
             </ul>
           </li>
           <a class="nav-link active" href="/logout">Log out</a>

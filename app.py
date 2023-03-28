@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from riotwatcher import LolWatcher,ApiError
 from SECRETAPI import LOLAPI
 
-from forms import SearchMatch, Register, Login
+from forms import SearchMatch, Register, Login, EditUser
 from models import db, connect_db,Puuid,User
 
 lol_watcher = LolWatcher(LOLAPI)
@@ -50,6 +50,7 @@ def search():
             db.session.commit()
         return redirect(f'/search/{value}')
     return render_template('search.html',form=form)
+    
 
 @app.route('/search/<username>',methods=['GET'])
 def showmatches(username):
@@ -61,6 +62,16 @@ def showmatches(username):
         games.append(lol_watcher.match.by_id('na1',match))
     
     return render_template('match.html',games=games,user=user,)
+
+@app.route('/users')
+def user_page():
+    search = request.args.get('q')
+
+    if not search:
+        users = User.query.all()
+    else:
+        users = User.query.filter(User.username.like(f"%{search}%")).all()
+    return render_template('users.html', users=users)
 
 # User Signup/login/logout
 
@@ -152,12 +163,29 @@ def profile(username):
     rank = lol_watcher.league.by_summoner('na1',summoner['id'])
     return render_template('profile.html',user=user,rank=rank,games=games,summoner=summoner)
 
+@app.route('/users/<username>/edit',methods=['POST','GET'])
+def editUser(username):
+    user = User.query.filter_by(username=username).first()
+    form = EditUser(obj=user)
+    if g.user.username == user.username:
+        if form.validate_on_submit():
+            user.summoner = form.summoner.data
+            user.email = form.email.data
+            user.bio = form.bio.data
+            user.image_url = form.image_url.data
+            db.session.commit()
+            return redirect(f'/users/{username}')
+        return render_template('edit.html',form=form,user=user)
+    flash('Not Authorized User!','danger')
+    return redirect('/')
+
 @app.route('/update_summoner/<username>',methods=['POST'])
 def update_user_summoner(username):
     user = User.query.filter_by(username=username).first_or_404()
     user.summoner = request.form['summoner']
     db.session.commit()
     return redirect(f'/users/{username}')
+
 
 
 # @app.route('/matches')

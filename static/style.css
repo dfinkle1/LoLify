@@ -57,14 +57,14 @@ body {
 }
 
 .table.blueteam {
-  background-color: #97ecf0;
+  background-color: #47abff;
   color: #02323e;
   border-radius: 10px;
 }
 
 .table.redteam {
-  background: #84efab;
-  color: black;
+  background: #f82f2fe8;
+  color: rgb(255 255 255);
   border-radius: 10px;
 }
 

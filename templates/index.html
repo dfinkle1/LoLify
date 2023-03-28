@@ -2,11 +2,12 @@
     endblock %}{% block content %}
 <div class="container">
   <div class="row">
-    {%for key in champions['data']%}
+    {%for key in champions['data']%} 
     <div class="col-4">
-      <p>{{key}} <br><small>{{champions['data'][key]['title']}} <hr></small></p>
+      <p>{{key |replace('MonkeyKing','Wukong')}}<br><small>{{champions['data'][key]['title']}} </small><hr>
     </div>
       {%endfor%}
+    </p>
     </div>
   </div>
   {% endblock %}

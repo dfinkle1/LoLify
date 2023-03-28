@@ -7,7 +7,7 @@
       <div class="d-flex flex-column">
         <br />
         <h2 class="m-0">{{user.username.capitalize()}}</h2>
-        <p class="m-0">Bio</p>
+        <p class="m-0">{%if user.bio != none%} {{user.bio}} {% endif %}</p>
       </div>
     </div>
   </div>
@@ -32,29 +32,45 @@
 </div>
 <div class="row mt-5">
   <div class="col-lg-3">
-    {% if user.summoner is none %} {% else %}
+    {% if user.summoner is none %} {% else %} {% if rank[1]['queueType']
+    =='RANKED_SOLO_5x5'%} {% set rank = rank[1] %}
     <div class="card custom-card" style="width: 14rem">
       <div class="card-body">
-        <h5 class="card-title">{{rank[1]['summonerName']}}</h5>
+        <h5 class="card-title">{{rank['summonerName']}}</h5>
         <h6 class="mb-2">
-          {{rank[1]['tier']}} - {{rank[1]['rank']}}
-          <br />{{rank[1]['wins']}}-{{rank[1]['losses']}} {% set total =
-          rank[1]['losses']+rank[1]['wins'] %}
-          <small>WR: {{(rank[1]['wins']/total*100)|round()|int }}% </small>
+          {{rank['tier']}} - {{rank['rank']}}
+          <br />{{rank['wins']}}-{{rank['losses']}} {% set total =
+          rank['losses']+rank['wins'] %}
+          <small>WR: {{(rank['wins']/total*100)|round()|int }}% </small>
         </h6>
       </div>
     </div>
-    {% endif %}
+    {% else %} {% set rank = rank[0] %}
+    <div class="card custom-card" style="width: 14rem">
+      <div class="card-body">
+        <h5 class="card-title">{{rank['summonerName']}}</h5>
+        <h6 class="mb-2">
+          {{rank['tier']}} - {{rank['rank']}}
+          <br />{{rank['wins']}}-{{rank['losses']}} {% set total =
+          rank['losses']+rank['wins'] %}
+          <small>WR: {{(rank['wins']/total*100)|round()|int }}% </small>
+        </h6>
+      </div>
+    </div>
+    {% endif %} {% endif %}
   </div>
   <div class="col-lg-9">
     {% if user.summoner is none %} {% else %}
     <h1 class="d-flex justify-content-center">
       Match History for {{user.summoner}}
     </h1>
-    {% for game in games %}
+    {% for game in games %} {% for puuid in game['info']['participants'] %} {%
+    if puuid['puuid'] == summoner['puuid'] %} {% set player = puuid %}
     <h3 class="d-flex justify-content-center">Match</h3>
     <div class="col-12 d-flex justify-content-center">
-      <table class="table blueteam text-center">
+      <table
+        class="table {% if player.win == True %} blueteam {% else %}redteam{% endif %} text-center"
+      >
         <tbody>
           <tr>
             <th>Summoner</th>
@@ -64,10 +80,8 @@
             <th>Damage</th>
             <th>Control Wards</th>
           </tr>
-          {% for puuid in game['info']['participants'] %} {% if puuid['puuid']
-          == summoner['puuid'] %} {% set player = puuid %} {% for puuid in
-          game['info']['participants'] %} {% if puuid['teamId'] == player.teamId
-          %}
+          {% for puuid in game['info']['participants'] %} {% if puuid['teamId']
+          == player.teamId %}
           <tr>
             <td>{{puuid['summonerName']}}</td>
             <td>{{puuid['championName']}}</td>
@@ -81,9 +95,12 @@
       </table>
       {% endif %} {% endfor %}
     </div>
-
+    {% for puuid in game['info']['participants'] %} {% if puuid['puuid'] ==
+    summoner['puuid'] %} {% set player = puuid %}
     <div class="col-12 d-flex justify-content-center">
-      <table class="table redteam text-center">
+      <table
+        class="table {% if player.win != True %} blueteam{% else %}redteam{% endif %} text-center"
+      >
         <tbody>
           <tr>
             <th>Summoner</th>
@@ -93,10 +110,8 @@
             <th>Damage</th>
             <th>Control Wards</th>
           </tr>
-          {% for puuid in game['info']['participants'] %} {% if puuid['puuid']
-          == summoner['puuid'] %} {% set player = puuid %} {% for puuid in
-          game['info']['participants'] %} {% if puuid['teamId'] != player.teamId
-          %}
+          {% for puuid in game['info']['participants'] %} {% if puuid['teamId']
+          != player.teamId%}
           <tr>
             <td>{{puuid['summonerName']}}</td>
             <td>{{puuid['championName']}}</td>

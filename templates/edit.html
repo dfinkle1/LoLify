@@ -1,0 +1,23 @@
+{% extends 'base.html'%}{% block title %}Login{% endblock %} {% block content %}
+<div class="row justify-content-md-center">
+  <div class="col-md-7 col-lg-5">
+    <h2 class="row justify-content-md-center">Edit</h2>
+    <form method="POST" id="user_form">
+      {{ form.hidden_tag() }} {% for field in form if field.widget.input_type !=
+      'hidden' %} {% for error in field.errors %}
+      <span class="text-danger">{{ error }}</span>
+      {% endfor %} {{field.label}}{{ field(placeholder=field.label.text,
+      class="form-control mb-3",) }} {% endfor %}
+      <div class="text-center">
+        <button class="btn btn-primary btn-lg btn-block">Save Changes!</button>
+        <a
+          class="btn btn-success"
+          role="button "
+          href="/users/{{user.username}}"
+          >Go Back</a
+        >
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
