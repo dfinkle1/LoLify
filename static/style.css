@@ -2,6 +2,12 @@ body {
   color: #b0ffea;
 }
 
+#probg {
+  background-image: url("images/professionalbg.png");
+  background-repeat: repeat;
+  /* background-size: cover; */
+}
+
 .bgcolor {
   background-image: linear-gradient(to left top, #2c3531 0%, #116466 100%);
   background-attachment: fixed;

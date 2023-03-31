@@ -40,28 +40,42 @@ def home():
 def search():
     form = SearchMatch()
     if form.validate_on_submit():
-        value = form.search.data.lower()
-        name = Puuid.query.filter_by(username=value).first()
-        if name is None:
-            summoner = lol_watcher.summoner.by_name('na1',value)
-
-            addpuuid = Puuid(puuid= (summoner['puuid']),username=value) 
-            db.session.add(addpuuid)
-            db.session.commit()
-        return redirect(f'/search/{value}')
+        username = form.search.data.lower()
+        return redirect(f'/search/{username}')
     return render_template('search.html',form=form)
     
 
 @app.route('/search/<username>',methods=['GET'])
 def showmatches(username):
     user = Puuid.query.filter_by(username=username).first()
-    
-    matches = lol_watcher.match.matchlist_by_puuid('na1',user.puuid,0,2)
-    games = []
-    for match in matches:
-        games.append(lol_watcher.match.by_id('na1',match))
-    
-    return render_template('match.html',games=games,user=user,)
+    if user is None:
+        try:
+            summoner = lol_watcher.summoner.by_name('na1',username)
+
+            addpuuid = Puuid(puuid= (summoner['puuid']),username=username) 
+            db.session.add(addpuuid)
+            db.session.commit()
+            user = Puuid.query.filter_by(username=username).first()
+            matches = lol_watcher.match.matchlist_by_puuid('na1',user.puuid,0,2)
+            games = []
+            for match in matches:
+                games.append(lol_watcher.match.by_id('na1',match))
+            return render_template('match.html',games=games,user=user)
+        except ApiError as err:
+            if err.response.status_code == 429:
+                print('We should retry in {} seconds.'.format(err.headers['Retry-After']))
+                print('future requests wait until the retry-after time passes')
+            elif err.response.status_code == 404:
+                flash('Summoner with that name not found.','danger')
+                return redirect('/search')
+            else:
+                raise
+    else:
+        matches = lol_watcher.match.matchlist_by_puuid('na1',user.puuid,0,2)
+        games = []
+        for match in matches:
+            games.append(lol_watcher.match.by_id('na1',match))
+        return render_template('match.html',games=games,user=user,)
 
 @app.route('/users')
 def user_page():
@@ -147,12 +161,11 @@ def logout():
 @app.route('/users/<username>')
 def profile(username):
     user = User.query.filter_by(username=username).first()
-    dbSummoner = Puuid.query.filter_by(username=username).first()
     if user is None:
         flash('Not a current User','danger')
         return redirect('/')
     if user.summoner is None:
-        return render_template('profile.html',user=user)
+        return render_template('users/profile.html',user=user)
     
 
     summoner = lol_watcher.summoner.by_name('na1',user.summoner)
@@ -161,7 +174,7 @@ def profile(username):
     for match in matches:
         games.append(lol_watcher.match.by_id('na1',match))
     rank = lol_watcher.league.by_summoner('na1',summoner['id'])
-    return render_template('profile.html',user=user,rank=rank,games=games,summoner=summoner)
+    return render_template('users/profile.html',user=user,rank=rank,games=games,summoner=summoner)
 
 @app.route('/users/<username>/edit',methods=['POST','GET'])
 def editUser(username):
@@ -169,13 +182,26 @@ def editUser(username):
     form = EditUser(obj=user)
     if g.user.username == user.username:
         if form.validate_on_submit():
-            user.summoner = form.summoner.data
-            user.email = form.email.data
-            user.bio = form.bio.data
-            user.image_url = form.image_url.data
-            db.session.commit()
-            return redirect(f'/users/{username}')
-        return render_template('edit.html',form=form,user=user)
+            try: 
+                lol_watcher.summoner.by_name('na1',form.summoner.data)
+
+                user.summoner = form.summoner.data
+                user.email = form.email.data
+                user.bio = form.bio.data
+                user.image_url = form.image_url.data
+                db.session.commit()
+                return redirect(f'/users/{username}')
+            except ApiError as err:
+                if err.response.status_code == 404:
+                    flash('Invalid Summoner Name','danger')
+                    user.summoner = None
+                    user.email = form.email.data
+                    user.bio = form.bio.data
+                    user.image_url = form.image_url.data
+                    db.session.commit()
+                    return redirect(f'/users/{username}')
+                
+        return render_template('users/edit.html',form=form,user=user)
     flash('Not Authorized User!','danger')
     return redirect('/')
 
@@ -185,10 +211,3 @@ def update_user_summoner(username):
     user.summoner = request.form['summoner']
     db.session.commit()
     return redirect(f'/users/{username}')
-
-
-
-# @app.route('/matches')
-# def history():
-#     matches = lol_watcher.match.matchlist_by_puuid('na1',me['puuid'],0,2)
-#     return render_template('match.html',me=me,matches=matches)
