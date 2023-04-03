@@ -1,14 +1,5 @@
 body {
   color: #b0ffea;
-}
-
-#probg {
-  background-image: url("images/professionalbg.png");
-  background-repeat: repeat;
-  /* background-size: cover; */
-}
-
-.bgcolor {
   background-image: linear-gradient(to left top, #2c3531 0%, #116466 100%);
   background-attachment: fixed;
 }
@@ -60,6 +51,7 @@ body {
   width: 750px;
   height: 250px;
   font-size: 15px;
+  border-bottom: none;
 }
 
 .table.blueteam {
@@ -87,4 +79,17 @@ body {
 
 .navbar-custom .navbar-nav .nav-link {
   color: #73fad6;
+}
+
+.table.redteam a {
+  text-decoration: none;
+  color: #f8f1f1;
+}
+
+.table.blueteam a {
+  text-decoration: none;
+  color: #312b6e;
+}
+.table a:hover {
+  color: blue;
 }
