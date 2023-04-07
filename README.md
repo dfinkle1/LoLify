@@ -2,6 +2,17 @@
 
 LoLify is a web-app that uses RiotGames API for the game League of Legends. The web-app sorts through a player's match history and displays their stats, and allows them to create a user profile for other feedback.
 
+#### App Features Include:
+* The ability to create an account, allowing the user to:
+    * Pin their favorite League Of Legends account or their own personal account.
+    * Edit and update their account to display a different users stats.
+    
+
+    
+* User can search any active league of legends user and view their match history:
+    * This will display in-game stats
+    * It will show which team won/lost
+
 ## Installation
 
 To run LoLify on your local machine, follow these steps:
