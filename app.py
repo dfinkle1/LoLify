@@ -10,7 +10,9 @@ from riotwatcher import LolWatcher,ApiError
 from forms import SearchMatch, Register, Login, EditUser
 from models import db, connect_db,Puuid,User
 
-lol_watcher = LolWatcher(RGAPI-c399dd3c-5d02-4c6d-af14-a233c138dca2)
+
+lol_watcher = LolWatcher("RGAPI-c399dd3c-5d02-4c6d-af14-a233c138dca2")
+
 region = 'na1'
 
 CURR_USER_KEY = "curr_user"
