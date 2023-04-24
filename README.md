@@ -19,7 +19,7 @@ To run LoLify on your local machine, follow these steps:
 
 1. Use python3.7 to create a virtual environment: python3.7 -m venv myenv
 2. Activate the virtual environment: source myenv/bin/activate
-3. Clone this repository to your local machine: git clone https://github.com/[username]/LoLify.git
+3. Clone this repository to your local machine: git clone https://github.com/dfinkle1/LoLify.git
 4. Navigate to the project directory: cd LoLify
 5. Install the requirements.txt file using pip3: pip3 install -r requirements.txt
 6. Create a .env file and add your RiotGames API key: RIOT_API_KEY=[your api key]
