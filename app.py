@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
 from riotwatcher import LolWatcher,ApiError
-from SECRETAPI import LOLAPI
+# from SECRETAPI import LOLAPI
 
 from forms import SearchMatch, Register, Login, EditUser
 from models import db, connect_db,Puuid,User
