@@ -5,19 +5,23 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
 from riotwatcher import LolWatcher,ApiError
-# from SECRETAPI import LOLAPI
+LOL_API_KEY = os.enviorn.get('LOLAPI')
 
 from forms import SearchMatch, Register, Login, EditUser
 from models import db, connect_db,Puuid,User
 
-
-lol_watcher = LolWatcher("RGAPI-c399dd3c-5d02-4c6d-af14-a233c138dca2")
-
+lol_watcher = LolWatcher(LOL_API_KEY)
 region = 'na1'
 
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
+
+# Get the port number from the env variable
+port = int(os.environ.get("PORT",5000))
+
+if __name__ == "__main__":
+    app.run(debug=True, host ='0.0.0.0',port=port)
 
 # Get DB_URI from environ variable (useful for production/testing) or,
 # if not set there, use development local db.
