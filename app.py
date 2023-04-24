@@ -5,11 +5,11 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
 from riotwatcher import LolWatcher,ApiError
-LOL_API_KEY = os.enviorn.get('LOLAPI')
 
 from forms import SearchMatch, Register, Login, EditUser
 from models import db, connect_db,Puuid,User
 
+LOL_API_KEY = os.environ.get('LOLAPI')
 lol_watcher = LolWatcher(LOL_API_KEY)
 region = 'na1'
 
