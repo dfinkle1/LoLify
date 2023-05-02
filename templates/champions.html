@@ -1,0 +1,16 @@
+{% extends 'base.html' %}{% block title %}Home Page{% endblock %}{% block
+content %}
+<h1 class="text-center m-5">Champions</h1>
+<div class="row">
+  {%for key in champions['data']%}
+  <div class="col-4">
+    <p>
+      {{key |replace('MonkeyKing','Wukong')}}<br /><small
+        >{{champions['data'][key]['title']}}
+      </small>
+    </p>
+    <hr />
+  </div>
+  {%endfor%}
+</div>
+{% endblock %}

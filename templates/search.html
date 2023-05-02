@@ -7,9 +7,14 @@
       {{form.hidden_tag()}} {% for field in form if field.widget.input_type !=
       'hidden' %}{% for error in field.errors %}
       <span class="text-danger">{{ error }}</span> {% endfor %}
-      {{field(placeholder=field.label.text,class_="form-control")}} {% endfor %}
+      {{field(placeholder=field.label.text,class_="form-control text-center")}}
+      {% endfor %}
+      <div class="row justify-content-center mt-0">
+        <div class="col-md-10 col-lg-8">
+          <p class="text-center">Example: finkle11</p>
+        </div>
+      </div>
       <div class="text-center">
-        <br />
         <button class="btn btn-primary btn-block">Submit</button>
       </div>
     </form>

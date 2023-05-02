@@ -1,14 +1,84 @@
-{% extends 'base.html' %}{% block title %}Home Page{%
-    endblock %}{% block content %}
-<div class="container">
-  <div class="row">
-    {%for key in champions['data']%} 
-    <div class="col-4">
-      <p>{{key |replace('MonkeyKing','Wukong')}}<br><small>{{champions['data'][key]['title']}} </small><hr>
-    </div>
-      {%endfor%}
-    </p>
+{% extends 'base.html' %}{% block title %}Home Page{% endblock %}{% block
+content %}
+<!-- Button to trigger the modal -->
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#exampleModal">
+  About/How To
+</button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">About/How To</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Your content goes here -->
+        <p>
+          This App is not intutive for those that have not played the game it is
+          designed for.
+        </p>
+        <ul>
+          <li>
+            I have provided a sample username, in all input scenarios it should
+            work
+          </li>
+          <li>
+            This app searches from the Riot Games API and displays a players
+            information
+          </li>
+          <li>
+            You can view the list of champions and their names. Pictures are
+            unavailable due to storage
+          </li>
+          <li>I have provided a test account</li>
+          <li>Username:test</li>
+          <li>Password:test123</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
     </div>
   </div>
-  {% endblock %}
 </div>
+
+<div
+  class="row align-items-center justify-content-center mb-5"
+  style="height: 90vh">
+  <div class="col-md-7 col-lg-5 mb-5">
+    <h2 class="text-center">Find matches</h2>
+    <form class="mb-5" method="POST">
+      {{form.hidden_tag()}} {% for field in form if field.widget.input_type !=
+      'hidden' %}{% for error in field.errors %}
+      <span class="text-danger">{{ error }}</span> {% endfor %}
+      {{field(placeholder=field.label.text,class_="form-control")}} {% endfor %}
+      <div class="row justify-content-center mt-0">
+        <div class="col-md-10 col-lg-8">
+          <p class="text-center">Example: finkle11</p>
+        </div>
+      </div>
+      <div class="text-center">
+        <button class="btn btn-primary btn-lg mb-5">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

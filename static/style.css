@@ -4,6 +4,25 @@ body {
   background-attachment: fixed;
 }
 
+.container {
+  max-width: 1024px;
+}
+
+.modal-content {
+  color: #000000;
+}
+
+.test {
+  display: block;
+  width: 1080px;
+  margin: 0 auto;
+}
+.search-contaienr {
+  position: relative;
+  width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
 /* user profile  */
 .profile-container {
   display: flex;
